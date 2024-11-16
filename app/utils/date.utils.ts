@@ -5,7 +5,7 @@ export const mergeTimeAndDate = (date: Date, time: string): Date => {
   const newDate = new Date(date);
   
   // Set the time on the new Date object
-  newDate.setHours(hour + 8, minute, 0, 0); // Set hours and minutes, and reset seconds and milliseconds to 0
+  newDate.setHours(hour, minute, 0, 0); // Set hours and minutes, and reset seconds and milliseconds to 0
   newDate.toString()
   return newDate;
 }
