@@ -2,7 +2,8 @@ import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import bodyParser from 'body-parser';
-import connectToMongo from '@configs/mongo.config';
+import { useGoogleStrategy } from './configs/passport.config';
+import connectToMongo from './configs/mongo.config';
 // routes
 import agentRoute from './routes/agent.route'
 import authRoute from './routes/auth.route'
@@ -20,7 +21,6 @@ import passport from 'passport'
 import session from 'express-session'
 import cookieParser from 'cookie-parser';
 
-import { useGoogleStrategy } from '@configs/passport.config';
 
 
 
