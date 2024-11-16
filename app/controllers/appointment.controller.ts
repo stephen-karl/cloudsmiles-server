@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from 'uuid';
 import { ObjectId } from 'mongodb';
 import { Request, Response } from 'express';
-import { getStartAndEndOfDay, mergeTimeAndDate } from 'app/utils/date.utils';
+import { getStartAndEndOfDay, mergeTimeAndDate } from '../utils/date.utils';
 import { getDay } from '../utils/calendar.utils';
 import { FileUploader } from '../helpers/cloudinary/uploader';
 import { imageDeleter } from '../helpers/cloudinary/deleter';
