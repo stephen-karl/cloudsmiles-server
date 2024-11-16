@@ -1,5 +1,5 @@
 import { AppointmentResponseType } from '../interfaces/appointment.types';
-import { generateRandomPassword } from 'app/utils/generators';
+import { generateRandomPassword } from '../utils/generators';
 import { sendPatientWelcomeEmail } from '../helpers/resend/transporters';
 import { imageDeleter } from '../helpers/cloudinary/deleter';
 import { Request, Response } from 'express';

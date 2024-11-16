@@ -1,10 +1,10 @@
 import { Request, Response } from "express";
 import { imageUploader } from "../helpers/cloudinary/uploader";
-import { getDay } from "app/utils/calendar.utils";
-import { getStartAndEndOfDay, removeDateOffset } from "app/utils/date.utils";
+import { getDay } from "../utils/calendar.utils";
+import { getStartAndEndOfDay, removeDateOffset } from "../utils/date.utils";
 import { imageDeleter } from "../helpers/cloudinary/deleter";
-import { ISchedule } from "app/interfaces/schedules.types";
-import { generateRandomPassword } from "app/utils/generators";
+import { ISchedule } from "../interfaces/schedules.types";
+import { generateRandomPassword } from "../utils/generators";
 import { sendStaffWelcomeEmail } from '../helpers/resend/transporters'
 import DentistModel from "../schemas/mongo/dentist.schema";
 import ScheduleModel from "../schemas/mongo/schedule.schema";

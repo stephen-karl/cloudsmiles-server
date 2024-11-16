@@ -10,7 +10,7 @@ import {
 import { 
   extractAnswers,
   extractFeature,
-} from 'app/utils/agent.utils';
+} from '../utils/agent.utils';
 import contextsModel from "../schemas/mongo/contexts.schema";
 import messageModel from '../schemas/mongo/messages.schema';
 import chainModel from '../schemas/mongo/chains.schema'

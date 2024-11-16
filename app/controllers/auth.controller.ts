@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
-import { removeAccessTokenCookie, setAccessTokenCookie } from 'app/utils/cookie.utils';
+import { removeAccessTokenCookie, setAccessTokenCookie } from '../utils/cookie.utils';
 import { sendRecoveryLink, sendVerificationCode } from '../helpers/resend/transporters';
-import { getFullName } from 'app/utils/name.utils';
+import { getFullName } from '../utils/name.utils';
 import passport from 'passport';
 import CredentialsModel from '../schemas/mongo/credential.schema';
 import PatientModel from '../schemas/mongo/patient.schema';
