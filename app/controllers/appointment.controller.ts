@@ -109,8 +109,8 @@ export const getDayAppointments = async (req: Request, res: Response) => {
     const appointments = await AppointmentModel.aggregate([
       {
         $match: {
-          'appointmentDate.start': { $gte: new Date(startOfDay) },
-          'appointmentDate.end': { $lte: new Date(endOfDay) },
+          'appointmentDate.start': { $gte: startOfDay },
+          'appointmentDate.end': { $lte: endOfDay },
         },
       },
       {
