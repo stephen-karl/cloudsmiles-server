@@ -8,7 +8,7 @@ import {
  } from '../../constants/prompts'
 import messageModel from '../../schemas/mongo/messages.schema';
 
-import { convertChatHistory } from 'app/utils/agent.utils'
+import { convertChatHistory } from '../../utils/agent.utils'
 import { Message } from 'cohere-ai/api';
 
 type MessageType = {
