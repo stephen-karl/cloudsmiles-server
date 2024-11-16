@@ -12,7 +12,7 @@ import {
   partiallyCheckBillStatus,
   getPayments,
   getMonthlyRevenue,
- } from "@controllers/payment.controller";
+ } from "../controllers/payment.controller";
 
 const router = express.Router()
 

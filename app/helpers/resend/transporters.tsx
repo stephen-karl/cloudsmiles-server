@@ -5,7 +5,7 @@ import StaffWelcomeEmail from '../../templates/StaffWelcomeEmail'
 import PatientWelcomeEmail from '../../templates/PatientWelcomeEmail'
 import RecoveryLinkEmail from '../../templates/RecoveryLinkEmail'
 import VerificationCodeEmail from '../../templates/VerificationCodeEmail'
-import { OrderResponseType } from '@schemas/mongo/order.schema';
+import { OrderResponseType } from '../../schemas/mongo/order.schema';
 
 
 export const sendRecoveryLink = async (email: string, firstName: string, link: string) => {

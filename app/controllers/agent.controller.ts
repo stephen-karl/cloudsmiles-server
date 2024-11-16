@@ -1,22 +1,22 @@
 import { Request, Response } from 'express';
-import { embedDocuments } from '@helpers/cohere/embedder'
-import { rerankDocuments } from '@helpers/cohere/reranker';
+import { embedDocuments } from '../helpers/cohere/embedder'
+import { rerankDocuments } from '../helpers/cohere/reranker';
 import { 
   patientChatAgent,
   guestChatAgent,
   identifierAgent, 
   classifierAgent,
-} from '@helpers/cohere/agents';
+} from '../helpers/cohere/agents';
 import { 
   extractAnswers,
   extractFeature,
 } from 'app/utils/agent.utils';
-import contextsModel from "@schemas/mongo/contexts.schema";
-import messageModel from '@schemas/mongo/messages.schema';
-import chainModel from '@schemas/mongo/chains.schema'
-import requestsModel from '@schemas/mongo/requests.schema';
-import { features } from '@constants/features';
-import AppointmentModel from '@schemas/mongo/appointment.schema';
+import contextsModel from "../schemas/mongo/contexts.schema";
+import messageModel from '../schemas/mongo/messages.schema';
+import chainModel from '../schemas/mongo/chains.schema'
+import requestsModel from '../schemas/mongo/requests.schema';
+import { features } from '../constants/features';
+import AppointmentModel from '../schemas/mongo/appointment.schema';
 
 
 export const ingestContext = async (req: Request, res: Response) => {

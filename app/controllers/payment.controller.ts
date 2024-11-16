@@ -4,15 +4,15 @@ import {
   attachPaymentIntent, 
   createPaymentIntent, 
   getPaymentIntent
-} from '@helpers/paymongo/payment.intent';
-import { ComponentType } from '@interfaces/treatment.types';
-import { createPaymentMethod } from '@helpers/paymongo/payment.method';
-import AppointmentModel from '@schemas/mongo/appointment.schema';
-import PaymentModel from '@schemas/mongo/payment.schema';
-import BillModel from '@schemas/mongo/bill.schema';
-import CheckupModel from '@schemas/mongo/checkup.schema';
-import TreatmentModel from '@schemas/mongo/treatment.schema';
-import ProductModel from '@schemas/mongo/products.schema';
+} from '../helpers/paymongo/payment.intent';
+import { ComponentType } from '../interfaces/treatment.types';
+import { createPaymentMethod } from '../helpers/paymongo/payment.method';
+import AppointmentModel from '../schemas/mongo/appointment.schema';
+import PaymentModel from '../schemas/mongo/payment.schema';
+import BillModel from '../schemas/mongo/bill.schema';
+import CheckupModel from '../schemas/mongo/checkup.schema';
+import TreatmentModel from '../schemas/mongo/treatment.schema';
+import ProductModel from '../schemas/mongo/products.schema';
 
 
 const decrementSupplies = async (appointmentId: string) => {

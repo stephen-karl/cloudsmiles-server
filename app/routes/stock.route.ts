@@ -17,7 +17,7 @@ import {
   getOrders,
   deleteOrder,
   updateOrder
-} from "@controllers/stock.controller";
+} from "../controllers/stock.controller";
 
 const router = Router()
 const storage = memoryStorage();

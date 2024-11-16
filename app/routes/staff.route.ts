@@ -17,7 +17,7 @@ import {
   deleteAssistant,
   getAllAssistants,
   getStaffCount,
-} from "@controllers/staff.controller"
+} from "../controllers/staff.controller"
 
 const router = express.Router()
 const storage = memoryStorage();

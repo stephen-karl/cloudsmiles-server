@@ -4,7 +4,7 @@ import {
   editVendor,
   deleteVendor,
   getVendorCount,
-} from "@controllers/vendor.controller";
+} from "../controllers/vendor.controller";
 import { Router } from "express";
 import Multer, { memoryStorage } from "multer";
 

@@ -13,7 +13,7 @@ import {
   getContexts,
   getRequests,
   getKnowledgeCount
-} from "@controllers/agent.controller"
+} from "../controllers/agent.controller"
 
 const router = express.Router()
 

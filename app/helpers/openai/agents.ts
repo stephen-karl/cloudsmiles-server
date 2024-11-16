@@ -1,5 +1,5 @@
-import messageModel from "@schemas/mongo/messages.schema"
-import { openai } from '@configs/openai.config'
+import messageModel from "../../schemas/mongo/messages.schema"
+import { openai } from '../../configs/openai.config'
 
 export const patientChatAgent = async (
   message: string, 

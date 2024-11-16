@@ -1,8 +1,8 @@
-import AdminModel from "@schemas/mongo/admin.schema";
-import AssistantModel from "@schemas/mongo/assistant.schema";
-import { ICredential } from "@schemas/mongo/credential.schema";
-import DentistModel from "@schemas/mongo/dentist.schema";
-import PatientModel from "@schemas/mongo/patient.schema";
+import AdminModel from "../schemas/mongo/admin.schema";
+import AssistantModel from "../schemas/mongo/assistant.schema";
+import { ICredential } from "../schemas/mongo/credential.schema";
+import DentistModel from "../schemas/mongo/dentist.schema";
+import PatientModel from "../schemas/mongo/patient.schema";
 import { Response } from "express";
 
 

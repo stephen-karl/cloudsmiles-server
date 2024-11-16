@@ -1,4 +1,4 @@
-import cloudinary from "@configs/cloudinary.config";
+import cloudinary from "../../configs/cloudinary.config";
 
 export const imageUploader = async (
   buffer: Buffer, 

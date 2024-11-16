@@ -1,4 +1,4 @@
-import { ICredential } from '@schemas/mongo/credential.schema';
+import { ICredential } from '../schemas/mongo/credential.schema';
 import { Response } from 'express';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';

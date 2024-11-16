@@ -1,6 +1,6 @@
 import jwt, { JwtPayload } from 'jsonwebtoken';
 import { Request, Response, NextFunction } from 'express';
-import { removeAccessTokenCookie } from 'app/utils/cookie.utils';
+import { removeAccessTokenCookie } from '../utils/cookie.utils';
 
 // Extend the Request type to include user
 interface User {

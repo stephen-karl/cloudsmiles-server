@@ -1,7 +1,7 @@
 import passport from 'passport';
 import passportGoogle from 'passport-google-oauth20'
 import passportApple from 'passport-apple'
-import CredentialsModel from '@schemas/mongo/credential.schema';
+import CredentialsModel from '../schemas/mongo/credential.schema';
 
 
 const getUserByEmail = async (email: string) => {

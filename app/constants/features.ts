@@ -1,8 +1,8 @@
-import chainModel from "@schemas/mongo/chains.schema";
-import { appointmentAgent } from "@helpers/cohere/agents";
-import AppointmentModel from "@schemas/mongo/appointment.schema";
-import PaymentModel from "@schemas/mongo/payment.schema";
-import { addMinutesToTime, combineDateAndTime, removeDateOffset } from "app/utils/date.utils";
+import chainModel from "../schemas/mongo/chains.schema";
+import { appointmentAgent } from "../helpers/cohere/agents";
+import { addMinutesToTime, combineDateAndTime } from "../utils/date.utils";
+import AppointmentModel from "../schemas/mongo/appointment.schema";
+import PaymentModel from "../schemas/mongo/payment.schema";
 // Define IFeatureFunction as a function type interface
 interface IFeatureFunction {
   (message: string, patientId: string, chainData: any): Promise<any>;

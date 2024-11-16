@@ -4,7 +4,7 @@ import {
   getPatients,
   getVisits,
   getPayments
-} from "@controllers/dashboard.controller";
+} from "../controllers/dashboard.controller";
 import express from "express";
 
 const router = express.Router()

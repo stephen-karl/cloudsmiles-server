@@ -13,8 +13,8 @@ import {
   Img,
 } from "@react-email/components";
 import {formatDateWithSuffix } from '../utils/date.utils'
-import { ProductOrderResponseType } from '@schemas/mongo/order.schema';
-import { VendorType } from '@schemas/mongo/vendors.schema';
+import { ProductOrderResponseType } from '../schemas/mongo/order.schema';
+import { VendorType } from '../schemas/mongo/vendors.schema';
 
 type PurchaseOrderEmailProps = {
   orderVendorId: VendorType;

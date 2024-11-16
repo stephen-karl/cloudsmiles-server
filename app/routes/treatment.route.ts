@@ -9,7 +9,7 @@ import {
   editTreatment,
   getTreatmentCost,
   getTreatmentCount
-} from "@controllers/treatment.controller";
+} from "../controllers/treatment.controller";
 
 const router = express.Router()
 

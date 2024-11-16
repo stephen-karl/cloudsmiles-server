@@ -1,11 +1,10 @@
-import { imageUploader } from "@helpers/cloudinary/uploader";
+import { imageUploader } from "../helpers/cloudinary/uploader";
 import { Request, Response } from "express";
-import { imageDeleter } from "@helpers/cloudinary/deleter";
-import OrderModel, { OrderResponseType, OrderType, ProductOrderType } from "@schemas/mongo/order.schema";
-import ProductModel, { ProductType } from "@schemas/mongo/products.schema";
-import vendorModel from "@schemas/mongo/vendors.schema";
-import resend from "@configs/resend.config,";
-import { sendPurchaseOrderEmail } from "@helpers/resend/transporters";
+import { imageDeleter } from "../helpers/cloudinary/deleter";
+import { sendPurchaseOrderEmail } from "../helpers/resend/transporters";
+import OrderModel, { OrderResponseType, OrderType, ProductOrderType } from "../schemas/mongo/order.schema";
+import ProductModel, { ProductType } from "../schemas/mongo/products.schema";
+import vendorModel from "../schemas/mongo/vendors.schema";
 
 export const validateSku = async (req: Request, res: Response) => {
   try {

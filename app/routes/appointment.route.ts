@@ -14,7 +14,7 @@ import {
   getPatientMonthlyAppointments,
   getDentistMonthlyAppointments,
 
-} from "@controllers/appointment.controller"
+} from "../controllers/appointment.controller"
 
 
 const router = Router()

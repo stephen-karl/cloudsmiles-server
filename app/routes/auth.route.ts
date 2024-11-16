@@ -16,7 +16,7 @@ import {
   changePassword,
   verifyLoginToken,
   verifyOtp
-} from "@controllers/auth.controller"
+} from "../controllers/auth.controller"
 
 const router = express.Router()
 

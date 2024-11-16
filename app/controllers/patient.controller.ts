@@ -1,17 +1,17 @@
-import { AppointmentResponseType } from '@interfaces/appointment.types';
+import { AppointmentResponseType } from '../interfaces/appointment.types';
 import { generateRandomPassword } from 'app/utils/generators';
-import { imageDeleter } from '@helpers/cloudinary/deleter';
+import { sendPatientWelcomeEmail } from '../helpers/resend/transporters';
+import { imageDeleter } from '../helpers/cloudinary/deleter';
 import { Request, Response } from 'express';
-import { imageUploader } from '@helpers/cloudinary/uploader';
-import PatientModel from '@schemas/mongo/patient.schema';
-import CredentialsModel from '@schemas/mongo/credential.schema';
-import RecordModel from '@schemas/mongo/record.schema';
-import resend from '@configs/resend.config,';
+import { imageUploader } from '../helpers/cloudinary/uploader';
+import PatientModel from '../schemas/mongo/patient.schema';
+import CredentialsModel from '../schemas/mongo/credential.schema';
+import RecordModel from '../schemas/mongo/record.schema';
+import resend from '../configs/resend.config,';
 import bcrypt from 'bcrypt';
-import AppointmentModel from '@schemas/mongo/appointment.schema';
-import CheckupModel from '@schemas/mongo/checkup.schema';
-import DentistModel from '@schemas/mongo/dentist.schema';
-import { sendPatientWelcomeEmail } from '@helpers/resend/transporters';
+import AppointmentModel from '../schemas/mongo/appointment.schema';
+import CheckupModel from '../schemas/mongo/checkup.schema';
+import DentistModel from '../schemas/mongo/dentist.schema';
 
 const saltRounds = 10;
 

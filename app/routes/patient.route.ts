@@ -10,7 +10,7 @@ import {
   getDentalRecord,
   getPatientProfile,
   getPatientCount
-} from "@controllers/patient.controller";
+} from "../controllers/patient.controller";
 
 
 
