@@ -1,12 +1,12 @@
 import { Request, Response } from 'express';
-import { imageUploader } from '@helpers/cloudinary/uploader';
-import { imageDeleter } from '@helpers/cloudinary/deleter';
+import { imageUploader } from '../helpers/cloudinary/uploader';
+import { imageDeleter } from '../helpers/cloudinary/deleter';
 import { Model } from 'mongoose';
 import AdminModel, { AdminType } from '../schemas/mongo/admin.schema';
 import AssistantModel, { IAssistant } from '../schemas/mongo/assistant.schema';
-import PatientModel, { IPatient } from '@schemas/mongo/patient.schema';
-import DentistModel, { IDentist } from '@schemas/mongo/dentist.schema';
-import CredentialsModel from '@schemas/mongo/credential.schema';
+import PatientModel, { IPatient } from '../schemas/mongo/patient.schema';
+import DentistModel, { IDentist } from '../schemas/mongo/dentist.schema';
+import CredentialsModel from '../schemas/mongo/credential.schema';
 
 
 // Define the type for modelMap

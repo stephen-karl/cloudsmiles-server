@@ -3,19 +3,19 @@ import { ObjectId } from 'mongodb';
 import { Request, Response } from 'express';
 import { getStartAndEndOfDay, mergeTimeAndDate } from 'app/utils/date.utils';
 import { getDay } from 'app/utils/calendar.utils';
-import { FileUploader } from '@helpers/cloudinary/uploader';
-import { imageDeleter } from '@helpers/cloudinary/deleter';
-import { DocumentResponseType } from '@interfaces/documents.types';
-import { formatToDeleteDocument } from '@helpers/cloudinary/formatter';
-import CheckupModel, { CheckupType } from '@schemas/mongo/checkup.schema';
-import AppointmentModel from '@schemas/mongo/appointment.schema';
-import PaymentModel from '@schemas/mongo/payment.schema';
-import DentistModel from '@schemas/mongo/dentist.schema';
-import PatientModel from '@schemas/mongo/patient.schema';
-import ScheduleModel from '@schemas/mongo/schedule.schema';
-import DocumentModel from '@schemas/mongo/documents.schema';
-import CredentialsModel from '@schemas/mongo/credential.schema';
-import RecordModel from '@schemas/mongo/record.schema';
+import { FileUploader } from '../helpers/cloudinary/uploader';
+import { imageDeleter } from '../helpers/cloudinary/deleter';
+import { DocumentResponseType } from '../interfaces/documents.types';
+import { formatToDeleteDocument } from '../helpers/cloudinary/formatter';
+import CheckupModel, { CheckupType } from '../schemas/mongo/checkup.schema';
+import AppointmentModel from '../schemas/mongo/appointment.schema';
+import PaymentModel from '../schemas/mongo/payment.schema';
+import DentistModel from '../schemas/mongo/dentist.schema';
+import PatientModel from '../schemas/mongo/patient.schema';
+import ScheduleModel from '../schemas/mongo/schedule.schema';
+import DocumentModel from '../schemas/mongo/documents.schema';
+import CredentialsModel from '../schemas/mongo/credential.schema';
+import RecordModel from '../schemas/mongo/record.schema';
 
 
 export const createAppointment = async (req: Request, res: Response) => {

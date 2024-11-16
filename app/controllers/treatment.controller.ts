@@ -1,11 +1,11 @@
 import { Request, Response } from 'express';
-import { IComponentRequest } from '@interfaces/component.types';
-import { CheckupResponse, ComponentType, MedicineResponseType, MedicineType, TreatmentRequestType } from '@interfaces/treatment.types';
-import MedicineModel from '@schemas/mongo/medicine.schema';
-import ProductModel, { ProductType } from "@schemas/mongo/products.schema";
-import ComponentModel from "@schemas/mongo/component.schema";
-import TreatmentModel from '@schemas/mongo/treatment.schema';
-import CheckupModel from '@schemas/mongo/checkup.schema';
+import { IComponentRequest } from '../interfaces/component.types';
+import { CheckupResponse, ComponentType, MedicineResponseType, MedicineType, TreatmentRequestType } from '../interfaces/treatment.types';
+import ProductModel, { ProductType } from "../schemas/mongo/products.schema";
+import MedicineModel from '../schemas/mongo/medicine.schema';
+import ComponentModel from "../schemas/mongo/component.schema";
+import TreatmentModel from '../schemas/mongo/treatment.schema';
+import CheckupModel from '../schemas/mongo/checkup.schema';
 
 
 export const getAvailableComponents = async (req: Request, res: Response) => {

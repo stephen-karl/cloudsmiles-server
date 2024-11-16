@@ -1,10 +1,3 @@
-interface IDocuments {
-  _id: string;
-  type: string;
-  data: string;
-  label: string;
-  score: number
-}
 
 export const patientChatPrompt = ( context:string) =>{
 

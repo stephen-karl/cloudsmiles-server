@@ -1,17 +1,16 @@
 import { Request, Response, NextFunction } from 'express';
 import { removeAccessTokenCookie, setAccessTokenCookie } from 'app/utils/cookie.utils';
+import { sendRecoveryLink, sendVerificationCode } from '../helpers/resend/transporters';
+import { getFullName } from 'app/utils/name.utils';
 import passport from 'passport';
-import CredentialsModel from '@schemas/mongo/credential.schema';
-import PatientModel from '@schemas/mongo/patient.schema';
+import CredentialsModel from '../schemas/mongo/credential.schema';
+import PatientModel from '../schemas/mongo/patient.schema';
 import bcrypt from 'bcrypt';
-import resend from '@configs/resend.config,';
 import dotenv from 'dotenv';
 import jwt from 'jsonwebtoken';
-import AssistantModel from '@schemas/mongo/assistant.schema';
-import AdminModel from '@schemas/mongo/admin.schema';
-import DentistModel from '@schemas/mongo/dentist.schema';
-import { sendRecoveryLink, sendVerificationCode } from '@helpers/resend/transporters';
-import { getFullName } from 'app/utils/name.utils';
+import AssistantModel from '../schemas/mongo/assistant.schema';
+import AdminModel from '../schemas/mongo/admin.schema';
+import DentistModel from '../schemas/mongo/dentist.schema';
 
 dotenv.config()
 

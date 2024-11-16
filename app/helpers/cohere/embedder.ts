@@ -1,4 +1,4 @@
-import { cohere } from '@configs/cohere.config'
+import { cohere } from '../../configs/cohere.config'
 
 const preprocessor = (text: string): string => {
   return text.trim().replace(/[^a-zA-Z0-9 ]/g, "").toLowerCase();

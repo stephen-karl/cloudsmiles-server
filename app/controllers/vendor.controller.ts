@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
-import VendorModel from "@schemas/mongo/vendors.schema";
-import { imageUploader } from "@helpers/cloudinary/uploader";
-import { imageDeleter } from "@helpers/cloudinary/deleter";
+import { imageUploader } from "../helpers/cloudinary/uploader";
+import { imageDeleter } from "../helpers/cloudinary/deleter";
+import VendorModel from "../schemas/mongo/vendors.schema";
 
 export const createVendor = async (req: Request, res: Response) => {
   try {

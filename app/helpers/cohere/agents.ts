@@ -1,4 +1,4 @@
-import { cohere } from '@configs/cohere.config'
+import { cohere } from '../../configs/cohere.config'
 import { 
   patientChatPrompt,
   guestChatPrompt,

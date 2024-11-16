@@ -1,17 +1,17 @@
 import { Request, Response } from "express";
-import { imageUploader } from "@helpers/cloudinary/uploader";
+import { imageUploader } from "../helpers/cloudinary/uploader";
 import { getDay } from "app/utils/calendar.utils";
 import { getStartAndEndOfDay, removeDateOffset } from "app/utils/date.utils";
-import { imageDeleter } from "@helpers/cloudinary/deleter";
+import { imageDeleter } from "../helpers/cloudinary/deleter";
 import { ISchedule } from "app/interfaces/schedules.types";
 import { generateRandomPassword } from "app/utils/generators";
 import { sendStaffWelcomeEmail } from '../helpers/resend/transporters'
-import DentistModel from "@schemas/mongo/dentist.schema";
-import ScheduleModel from "@schemas/mongo/schedule.schema";
-import chainModel from "@schemas/mongo/chains.schema";
-import AppointmentModel from "@schemas/mongo/appointment.schema";
-import AssistantModel from "@schemas/mongo/assistant.schema";
-import CredentialsModel from "@schemas/mongo/credential.schema";
+import DentistModel from "../schemas/mongo/dentist.schema";
+import ScheduleModel from "../schemas/mongo/schedule.schema";
+import chainModel from "../schemas/mongo/chains.schema";
+import AppointmentModel from "../schemas/mongo/appointment.schema";
+import AssistantModel from "../schemas/mongo/assistant.schema";
+import CredentialsModel from "../schemas/mongo/credential.schema";
 import bcrypt from "bcrypt";
 
 const saltRounds = 10;

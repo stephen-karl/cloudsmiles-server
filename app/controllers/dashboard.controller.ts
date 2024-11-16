@@ -1,8 +1,8 @@
 import { Request, Response } from "express";
-import ProductModel from "@schemas/mongo/products.schema";
-import AppointmentModel from "@schemas/mongo/appointment.schema";
-import PatientModel from "@schemas/mongo/patient.schema";
-import PaymentModel from "@schemas/mongo/payment.schema";
+import ProductModel from "../schemas/mongo/products.schema";
+import AppointmentModel from "../schemas/mongo/appointment.schema";
+import PatientModel from "../schemas/mongo/patient.schema";
+import PaymentModel from "../schemas/mongo/payment.schema";
 
 const monthMap = [
   "JAN",
