@@ -1,6 +1,5 @@
 import { Request, Response } from 'express';
 import { embedDocuments } from '../helpers/cohere/embedder'
-import { rerankDocuments } from '../helpers/cohere/reranker';
 import { 
   patientChatAgent,
   guestChatAgent,
@@ -11,11 +10,11 @@ import {
   extractAnswers,
   extractFeature,
 } from '../utils/agent.utils';
+import { features } from '../constants/features';
 import contextsModel from "../schemas/mongo/contexts.schema";
 import messageModel from '../schemas/mongo/messages.schema';
 import chainModel from '../schemas/mongo/chains.schema'
 import requestsModel from '../schemas/mongo/requests.schema';
-import { features } from '../constants/features';
 import AppointmentModel from '../schemas/mongo/appointment.schema';
 
 
