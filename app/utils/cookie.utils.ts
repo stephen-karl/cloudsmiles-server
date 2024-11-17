@@ -19,7 +19,7 @@ export const setAccessTokenCookie = (res: Response, existingUser: ICredential) =
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
     maxAge: 3600000, // 1 hour
-    sameSite: 'lax',
+    sameSite: 'none',
     path: '/', // Ensure the path is set
   });
 };
@@ -28,7 +28,7 @@ export const removeAccessTokenCookie = (res: Response) => {
   res.clearCookie('accessToken', {
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
-    sameSite: 'lax',
+    sameSite: 'none',
     path: '/', // Ensure the path matches the one used when setting the cookie
   });
 };
