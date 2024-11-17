@@ -34,8 +34,8 @@ export const createAppointment = async (req: Request, res: Response) => {
     
 
     const appointmentDate = appointmentData.appointmentDate
-    const appointmentStartTime = removeDateOffset(mergeTimeAndDate(appointmentDate, appointmentData.appointmentTime.start))
-    const appointmentEndTime = removeDateOffset(mergeTimeAndDate(appointmentDate, appointmentData.appointmentTime.end))
+    const appointmentStartTime = mergeTimeAndDate(appointmentDate, appointmentData.appointmentTime.start)
+    const appointmentEndTime = mergeTimeAndDate(appointmentDate, appointmentData.appointmentTime.end)
 
     const appointmentResult = await AppointmentModel.create({
       appointmentPatientId: patientResult._id,
