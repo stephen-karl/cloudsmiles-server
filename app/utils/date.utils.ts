@@ -5,12 +5,12 @@ import { TZDate } from "@date-fns/tz";
 const timeZone = 'Asia/Taipei';
 
 
-export const mergeTimeAndDate = (date: string, time: string): Date => {
+export const mergeTimeAndDate = (date: string, time: string): string => {
   const newDate = date.split('T')[0]; // Extract the date part (assuming 'date' is in ISO format)
   const finalDate = `${newDate}T${time}:00`; // Combine date and time into an ISO string
-  const mergedDate = new TZDate(finalDate, timeZone); // Convert the ISO string to a Date object
-  return mergedDate;
+  return finalDate
 };
+
 
 
 export const getStartAndEndOfDay = (dateString: string) => {
