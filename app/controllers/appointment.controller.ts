@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from 'uuid';
 import { ObjectId } from 'mongodb';
 import { Request, Response } from 'express';
-import { getStartAndEndOfDay, mergeTimeAndDate } from '../utils/date.utils';
+import { getWeekRange, getStartAndEndOfDay, mergeTimeAndDate, getMonthRange } from '../utils/date.utils';
 import { getDay } from '../utils/calendar.utils';
 import { FileUploader } from '../helpers/cloudinary/uploader';
 import { imageDeleter } from '../helpers/cloudinary/deleter';
@@ -31,13 +31,12 @@ export const createAppointment = async (req: Request, res: Response) => {
     if (!patientResult) {
       return res.status(404).send({ message: 'Patient not found' });
     }
+    
 
-    const appointmentDate = new Date(appointmentData.appointmentDate);
+    const appointmentDate = appointmentData.appointmentDate
     const appointmentStartTime = mergeTimeAndDate(appointmentDate, appointmentData.appointmentTime.start);
     const appointmentEndTime = mergeTimeAndDate(appointmentDate, appointmentData.appointmentTime.end);
     
-    console.log(appointmentStartTime)
-    console.log(appointmentEndTime)
 
     const appointmentResult = await AppointmentModel.create({
       appointmentPatientId: patientResult._id,
@@ -49,15 +48,19 @@ export const createAppointment = async (req: Request, res: Response) => {
       },
     })
 
+
     const dentistResult = await DentistModel.findById(dentistData._id)
 
-    const day = getDay(appointmentDate)
-    const scheduleResult = await ScheduleModel.find({
+    const day = getDay(new Date(appointmentDate))
+    const scheduleResult = await ScheduleModel.findOne({
       dentistId: dentistData._id,
-      'schedules.day': day,
     });
 
-    const schedule = scheduleResult[0].schedules.find(schedule => schedule.day === day);
+    if (!scheduleResult) {
+      return res.status(404).send({ message: 'Schedule not found' });
+    }
+
+    const schedule = scheduleResult.schedules.find(schedule => schedule.day === day);
     
     const paymentResult = await PaymentModel.create({
       paymentAppointmentId: appointmentResult._id,
@@ -109,8 +112,8 @@ export const getDayAppointments = async (req: Request, res: Response) => {
     const appointments = await AppointmentModel.aggregate([
       {
         $match: {
-          'appointmentDate.start': { $gte: startOfDay },
-          'appointmentDate.end': { $lte: endOfDay },
+          'appointmentDate.start': { $gte: new Date(startOfDay) },
+          'appointmentDate.end': { $lte: new Date(endOfDay) },
         },
       },
       {
@@ -231,15 +234,17 @@ export const getDayAppointments = async (req: Request, res: Response) => {
   }
 }
 export const getWeekAppointments = async (req: Request, res: Response) => {
-  const startDate = String(req.query.start)
-  const endDate = String(req.query.end)
+  const date = String(req.query.date)
+
+  const { start, end } = getWeekRange(date);
+
 
   try {
     const appointments = await AppointmentModel.aggregate([
       {
         $match: {
-          'appointmentDate.start': { $gte: new Date(startDate) },
-          'appointmentDate.end': { $lte: new Date(endDate) },
+          'appointmentDate.start': { $gte: start},
+          'appointmentDate.end': { $lte: end },
         },
       },
       {
@@ -362,21 +367,14 @@ export const getMonthlyAppointments = async (req: Request, res: Response) => {
 
   const date = req.params.date;
 
-  const startDate = new Date(date);
-  startDate.setDate(1);
-  startDate.setHours(0, 0, 0, 0);
-
-  const endDate = new Date(date);
-  endDate.setMonth(endDate.getMonth() + 1);
-  endDate.setDate(0);
-  endDate.setHours(23, 59, 59, 999);
+  const { start, end } = getMonthRange(date);
 
   try {
     const appointments = await AppointmentModel.aggregate([
       {
         $match: {
-          'appointmentDate.start': { $gte: new Date(startDate) },
-          'appointmentDate.end': { $lte: new Date(endDate) },
+          'appointmentDate.start': { $gte: start },
+          'appointmentDate.end': { $lte: end },
         },
       },
       {

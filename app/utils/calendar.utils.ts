@@ -14,6 +14,7 @@ export const isoDateConverter = (date: Date | string) => {
 };
 
 export const getDay = (date: Date) => {
+
   const day = date.getDay();
   const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
   return days[day];

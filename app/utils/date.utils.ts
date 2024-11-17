@@ -1,22 +1,61 @@
-export const mergeTimeAndDate = (date: Date, time: string): Date => {
-  const [hour, minute] = time.split(':').map(Number);
-  
-  // Create a new Date object set to the provided date's local time
-  const newDate = new Date(date);
-  
-  // Set the time on the new Date object
-  newDate.setHours(hour, minute, 0, 0); // Set hours and minutes, and reset seconds and milliseconds to 0
-  newDate.toString()
-  return newDate;
-}
+import { toZonedTime } from "date-fns-tz";
+import {startOfWeek, endOfWeek } from 'date-fns';
+import { TZDate } from "@date-fns/tz";
 
-export const getStartAndEndOfDay = (dateString: string) => {
-  const date = new Date(dateString);
-  const startOfDay = new Date(date.setHours(0 + 8, 0, 0, 0)).toISOString();
-  const endOfDay = new Date(date.setHours(23 + 8, 59, 59, 999)).toISOString();
-  return { startOfDay, endOfDay };
+const timeZone = 'Asia/Taipei';
+
+export const mergeTimeAndDate = (date: string, time: string): Date => {
+  const newDate = date.split('T')[0]; // Extract the date part (assuming 'date' is in ISO format)
+  const dateTimeString = `${newDate}T${time}:00`; // Combine date and time into an ISO string
+
+  // Convert the combined date and time to UTC (appending 'Z')
+  const utcDate = new Date(dateTimeString + "Z");
+
+  // Define the Taiwan timezone identifier
+  const taiwanTimeZone = 'Asia/Taipei';
+
+  // Convert UTC date to Taiwan Standard Time (TST)
+  const taiwanTime = toZonedTime(utcDate, taiwanTimeZone);
+
+  return taiwanTime;
 };
 
+export const getStartAndEndOfDay = (dateString: string) => {
+
+  const newDate = dateString.split('T')[0]; // Extract the date part (assuming 'date' is in ISO format)
+
+  const startOfDay = `${newDate}T00:00:00.000Z`;
+  const endOfDay = `${newDate}T23:59:59.999Z`;
+
+  return { startOfDay: startOfDay, endOfDay: endOfDay };
+};
+
+export const getWeekRange = (date: string): { start: Date, end: Date } => {
+  // Convert the input date string to a Date object
+  const inputDate = new TZDate(date, timeZone);
+  // Get the start of the week (Monday)
+  const startOfTheWeek = startOfWeek(inputDate, { weekStartsOn: 1 }); // Week starts on Monday
+  const endOfTheWeek = endOfWeek(inputDate, { weekStartsOn: 1 }); // Week ends on Sunday
+
+  return {
+    start: startOfTheWeek,
+    end: endOfTheWeek,
+  };
+};
+
+export const getMonthRange = (date: string): { start: Date, end: Date } => {
+  // Convert the input date string to a Date object
+  const inputDate = new TZDate(date, timeZone);
+  // Get the start of the month
+  const startOfMonth = new Date(inputDate.getFullYear(), inputDate.getMonth(), 1);
+  // Get the end of the month
+  const endOfMonth = new Date(inputDate.getFullYear(), inputDate.getMonth() + 1, 0);
+
+  return {
+    start: startOfMonth,
+    end: endOfMonth,
+  };
+}
 
 export const addDateOffset = (date: Date): string => {
   // Extract date and time components
