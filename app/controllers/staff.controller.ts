@@ -1,4 +1,5 @@
 import { Request, Response } from "express";
+import { TZDate } from "@date-fns/tz";
 import { imageUploader } from "../helpers/cloudinary/uploader";
 import { getDay } from "../utils/calendar.utils";
 import { getStartAndEndOfDay, removeDateOffset } from "../utils/date.utils";
@@ -217,7 +218,7 @@ export const getAllDentists = async (req: Request, res: Response) => {
 export const getDayDentists = async (req: Request, res: Response) => {
   const { date: dateString } = req.params
   // const date = isoDateConverter(dateString)
-  const date = new Date(dateString)
+  const date = new TZDate(dateString)
   const day = getDay(date)
 
   try {
