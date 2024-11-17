@@ -1,17 +1,13 @@
-import { toZonedTime } from "date-fns-tz";
-import {startOfWeek, endOfWeek } from 'date-fns';
+import {startOfWeek, endOfWeek, format } from 'date-fns';
 import { TZDate } from "@date-fns/tz";
 
 const timeZone = 'Asia/Taipei';
 
-
 export const mergeTimeAndDate = (date: string, time: string): string => {
   const newDate = date.split('T')[0]; // Extract the date part (assuming 'date' is in ISO format)
-  const finalDate = `${newDate}T${time}:00`; // Combine date and time into an ISO string
+  const finalDate = `${newDate}T${time}:00Z`; // Combine date and time into an ISO string
   return finalDate
 };
-
-
 
 export const getStartAndEndOfDay = (dateString: string) => {
 

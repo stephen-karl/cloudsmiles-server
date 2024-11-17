@@ -286,7 +286,7 @@ export const guestAskQuestion = async (req: Request, res: Response) => {
     },
     {
       "$match": {
-        "score": { "$gt": 0.7 }
+        "score": { "$gt": 0.5 }
       }
     },
   ])
@@ -318,7 +318,7 @@ export const guestAskQuestion = async (req: Request, res: Response) => {
         },
         {
           "$match": {
-            "score": { "$gt": 0.7 }
+            "score": { "$gt": 0.5 }
           }
         },
       ])

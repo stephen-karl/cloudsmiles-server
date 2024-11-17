@@ -222,8 +222,6 @@ export const getDayDentists = async (req: Request, res: Response) => {
   const day = daysOfWeek[date.getDay()];
   console.log(day);
 
-
-
   try {
     const dentistResponse = await ScheduleModel.find({ 
       'schedules.day': day,
@@ -335,14 +333,31 @@ export const getDentistTimeAvailability = async (req: Request, res: Response) =>
   const patientId = req.params.id
   try {
     const chainData = await chainModel.findOne({chainPatientId: patientId, chainIsActive: true})
-    const dentistId = chainData?.chainDataProgress?.dentist as string
-    const schedule = await ScheduleModel.findOne({dentistId})
-    const date = new Date(removeDateOffset(chainData?.chainDataProgress?.date))
-    const day = getDay(date)
-    const dentistSchedule = schedule?.schedules.find((schedule: ISchedule) => schedule.day === day)
-    const { startOfDay, endOfDay } =getStartAndEndOfDay(chainData?.chainDataProgress?.date)
+    if (!chainData) {
+      return res.status(404).json({ message: "No chain data found" });
+    }
 
-    console.log(startOfDay, endOfDay)
+
+    const dentistId = chainData.chainDataProgress.dentist as string
+    if (!dentistId) {
+      return res.status(404).json({ message: "No dentist found"});
+    }
+
+      
+    const schedule = await ScheduleModel.findOne({
+      dentistId: dentistId
+    })
+
+    if (!schedule) {
+      return res.status(404).json({ message: "No schedule found"});
+    }
+
+
+    const date = new Date(chainData.chainDataProgress.date)
+    const day = getDay(date)
+    const dentistSchedule = schedule.schedules.find((schedule: ISchedule) => schedule.day === day)
+    const { startOfDay, endOfDay } = getStartAndEndOfDay(chainData.chainDataProgress.date)
+
 
     const dentistAppointments = await AppointmentModel.aggregate([
       {

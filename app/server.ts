@@ -16,6 +16,7 @@ import patientRoute from './routes/patient.route'
 import vendorRoute from './routes/vendor.route'
 import dashboardRoute from './routes/dashboard.route'
 import profileRoute from './routes/profile.route';
+import reviewRoute from './routes/review.route';
 // auths
 import passport from 'passport'
 import session from 'express-session'
@@ -74,3 +75,5 @@ app.use('/patient/v1', patientRoute)
 app.use('/vendor/v1', vendorRoute)
 app.use('/dashboard/v1', dashboardRoute)
 app.use('/profile/v1', profileRoute)
+app.use('/review/v1', reviewRoute)
+
