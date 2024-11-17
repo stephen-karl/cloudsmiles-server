@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from 'uuid';
 import { ObjectId } from 'mongodb';
 import { Request, Response } from 'express';
-import { getWeekRange, getStartAndEndOfDay, mergeTimeAndDate, getMonthRange } from '../utils/date.utils';
+import { getWeekRange, getStartAndEndOfDay, mergeTimeAndDate, getMonthRange, addDateOffset} from '../utils/date.utils';
 import { getDay } from '../utils/calendar.utils';
 import { FileUploader } from '../helpers/cloudinary/uploader';
 import { imageDeleter } from '../helpers/cloudinary/deleter';
@@ -34,9 +34,8 @@ export const createAppointment = async (req: Request, res: Response) => {
     
 
     const appointmentDate = appointmentData.appointmentDate
-    const appointmentStartTime = mergeTimeAndDate(appointmentDate, appointmentData.appointmentTime.start);
-    const appointmentEndTime = mergeTimeAndDate(appointmentDate, appointmentData.appointmentTime.end);
-    
+    const appointmentStartTime = addDateOffset(mergeTimeAndDate(appointmentDate, appointmentData.appointmentTime.start))
+    const appointmentEndTime = addDateOffset(mergeTimeAndDate(appointmentDate, appointmentData.appointmentTime.end))
 
     const appointmentResult = await AppointmentModel.create({
       appointmentPatientId: patientResult._id,
