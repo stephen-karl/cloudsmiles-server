@@ -1,8 +1,10 @@
+import { createClient } from 'redis';
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import bodyParser from 'body-parser';
 import { useGoogleStrategy } from './configs/passport.config';
+
 import connectToMongo from './configs/mongo.config';
 // routes
 import agentRoute from './routes/agent.route'
@@ -21,6 +23,7 @@ import reviewRoute from './routes/review.route';
 import passport from 'passport'
 import session from 'express-session'
 import cookieParser from 'cookie-parser';
+import RedisStore from 'connect-redis';
 
 
 
@@ -30,6 +33,15 @@ dotenv.config();
 
 const app = express();
 const port = process.env.PORT || 3000;
+
+
+const redisClient = createClient({
+  password: process.env.REDIS_PASSWORD,
+  socket: {
+    host: process.env.REDIS_HOST,
+    port: parseInt(process.env.REDIS_PORT || '14504')
+  }
+});
 
 
 
@@ -49,6 +61,10 @@ app.use(session({
   secret: process.env.SESSION_SECRET || "keyboard cat",
   resave: false,
   saveUninitialized: true,
+  store: new RedisStore({
+    client: redisClient, // Redis client instance
+    ttl: 86400, // Time to live for sessions in seconds (1 day)
+  })
 }));
 
 app.use(passport.initialize());

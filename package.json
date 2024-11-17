@@ -25,6 +25,7 @@
     "body-parser": "^1.20.2",
     "cloudinary": "^2.4.0",
     "cohere-ai": "^7.10.2",
+    "connect-redis": "^7.1.1",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
     "date-fns": "^4.1.0",
@@ -47,6 +48,7 @@
     "qrcode": "^1.5.3",
     "react": "^18.3.1",
     "react-dom": "18.3.1",
+    "redis": "^4.7.0",
     "resend": "^3.5.0",
     "tsconfig-paths": "^4.2.0",
     "uuid": "^10.0.0"
