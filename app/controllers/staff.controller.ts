@@ -217,10 +217,11 @@ export const getAllDentists = async (req: Request, res: Response) => {
 // This is for the calendar page where the admin can view all the dentists in the header.
 export const getDayDentists = async (req: Request, res: Response) => {
   const { date: dateString } = req.params
-  const date = new TZDate(dateString); // Assuming TZDate is a valid custom class
-  const weekDays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-  const dayIndex = date.getDay(); 
-  const day = weekDays[dayIndex]; 
+  const date = new Date(dateString); // Assuming TZDate is a valid custom class
+  const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+  const day = daysOfWeek[date.getDay()];
+  console.log(day);
+
 
 
   try {
