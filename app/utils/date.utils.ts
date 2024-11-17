@@ -4,21 +4,14 @@ import { TZDate } from "@date-fns/tz";
 
 const timeZone = 'Asia/Taipei';
 
+
 export const mergeTimeAndDate = (date: string, time: string): Date => {
   const newDate = date.split('T')[0]; // Extract the date part (assuming 'date' is in ISO format)
-  const dateTimeString = `${newDate}T${time}:00`; // Combine date and time into an ISO string
-
-  // Convert the combined date and time to UTC (appending 'Z')
-  const utcDate = new Date(dateTimeString + "Z");
-
-  // Define the Taiwan timezone identifier
-  const taiwanTimeZone = 'Asia/Taipei';
-
-  // Convert UTC date to Taiwan Standard Time (TST)
-  const taiwanTime = toZonedTime(utcDate, taiwanTimeZone);
-
-  return taiwanTime;
+  const finalDate = `${newDate}T${time}:00`; // Combine date and time into an ISO string
+  const mergedDate = new TZDate(finalDate, timeZone); // Convert the ISO string to a Date object
+  return mergedDate;
 };
+
 
 export const getStartAndEndOfDay = (dateString: string) => {
 
