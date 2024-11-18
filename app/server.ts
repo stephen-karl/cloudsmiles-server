@@ -28,12 +28,14 @@ dotenv.config();
 const app = express();
 const port = process.env.PORT || 3000;
 
-
 app.use(cors({
-  origin:  process.env.FRONTEND_URL, 
-  methods: ["GET", "POST", "PUT", "DELETE"],
-  credentials: true,  // Allow credentials (cookies, authorization headers)
+  origin: process.env.FRONTEND_URL,  // Replace with your actual frontend URL
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  credentials: true,  // Allow cookies and authorization headers
 }));
+
+app.options('*', cors());  // This allows preflight requests
+
 
 
 async function startServer() {
