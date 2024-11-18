@@ -29,7 +29,7 @@ const app = express();
 const port = process.env.PORT || 3000;
 
 app.use(cors({
-  origin:  ['https://www.vsdentalcare.com'], 
+  origin:  [process.env.FRONTEND_URL], 
   methods: ["GET", "POST", "PUT", "DELETE"],
   credentials: true,  // Allow credentials (cookies, authorization headers)
 }));
