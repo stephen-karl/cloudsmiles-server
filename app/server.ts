@@ -44,7 +44,7 @@ async function startServer() {
     console.log('Successfully connected to Redis');
 
     // Connect to MongoDB
-    connectToMongo();
+    await connectToMongo();
     console.log('Successfully connected to MongoDB');
 
     // Initialize the server
