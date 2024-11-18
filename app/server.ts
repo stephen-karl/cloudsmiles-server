@@ -28,6 +28,13 @@ dotenv.config();
 const app = express();
 const port = process.env.PORT || 3000;
 
+app.use(cors({
+  origin:  ['https://www.vsdentalcare.com'], 
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  credentials: true,  // Allow credentials (cookies, authorization headers)
+}));
+
+
 // Create Redis client
 const redisClient = createClient({
   password: process.env.REDIS_PASSWORD,
@@ -49,13 +56,6 @@ async function startServer() {
 
     // Initialize the server
     app.use(cookieParser());
-
-    app.use(cors({
-      origin:  ['https://www.vsdentalcare.com'], 
-      methods: ["GET", "POST", "PUT", "DELETE"],
-      credentials: true,  // Allow credentials (cookies, authorization headers)
-    }));
-
 
 
     app.use(session({
