@@ -56,7 +56,7 @@ async function startServer() {
 
         
     app.use(cors({
-      origin:  [process.env.FRONTEND_URL], 
+      origin:  process.env.FRONTEND_URL, 
       methods: ["GET", "POST", "PUT", "DELETE"],
       credentials: true,  // Allow credentials (cookies, authorization headers)
     }));
