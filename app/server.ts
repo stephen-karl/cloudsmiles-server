@@ -50,11 +50,12 @@ async function startServer() {
     // Initialize the server
     app.use(cookieParser());
 
-    app.options('*', cors({
-      origin: 'https://www.vsdentalcare.com',
-      methods: ['GET', 'POST', 'PUT', 'DELETE'],
-      credentials: true,
+    app.use(cors({
+      origin:  [process.env.FRONTEND_URL], 
+      methods: ["GET", "POST", "PUT", "DELETE"],
+      credentials: true,  // Allow credentials (cookies, authorization headers)
     }));
+
 
 
     app.use(session({
