@@ -46,15 +46,7 @@ async function startServer() {
     // Connect to MongoDB
     await connectToMongo();
     console.log('Successfully connected to MongoDB');
-    
-    app.use((req, res, next) => {
-      res.header('Access-Control-Allow-Origin', process.env.FRONTEND_URL); 
-      next();
-    });
-    
-    console.log('Frontend URL:', process.env.FRONTEND_URL);
-
-        
+  
     app.use(cors({
       origin:  process.env.FRONTEND_URL, 
       methods: ["GET", "POST", "PUT", "DELETE"],
@@ -64,7 +56,6 @@ async function startServer() {
     
     // Initialize the server
     app.use(cookieParser());
-
 
     app.use(session({
       secret: process.env.SESSION_SECRET || 'keyboard cat',
