@@ -28,13 +28,7 @@ dotenv.config();
 const app = express();
 const port = process.env.PORT || 3000;
 
-app.use(cors({
-  origin: process.env.FRONTEND_URL,  // Replace with your actual frontend URL
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  credentials: true,  // Allow cookies and authorization headers
-}));
 
-app.options('*', cors());  // This allows preflight requests
 
 
 
@@ -48,6 +42,12 @@ async function startServer() {
         port: parseInt(process.env.REDIS_PORT || '6379'),
       },
     });
+    
+    app.use(cors({
+      origin: process.env.FRONTEND_URL,  // Replace with your actual frontend URL
+      methods: ['GET', 'POST', 'PUT', 'DELETE'],
+      credentials: true,  // Allow cookies and authorization headers
+    }));
 
     // Connect to Redis
     await redisClient.connect();
