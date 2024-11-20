@@ -525,9 +525,7 @@ export const getDentistDateAvailability = async (req: Request, res: Response) =>
       const appointmentTimeSlots = appointmentsOnDay.map((appointment) => {
         // Assuming start and end are predefined or can be extracted from the appointment
         const start = moment(appointment.appointmentDate.start)
-        start.subtract(8, 'hours')
         const end = moment(appointment.appointmentDate.end)
-        end.subtract(8, 'hours')
         return generateTimeSlots(start, end);
       });
 
