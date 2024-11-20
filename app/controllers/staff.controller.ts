@@ -406,15 +406,16 @@ export const getDentistTimeAvailability = async (req: Request, res: Response) =>
       );
     });
     
-    console.log(appointmentsOnDay)
-
-    const appointmentTimeSlots = appointmentsOnDay.map((appointment) => {
+   const appointmentTimeSlots = appointmentsOnDay.map((appointment) => {
       const start = moment(appointment.appointmentDate.start)
       start.subtract(8, 'hours')
       const end = moment(appointment.appointmentDate.end)
       end.subtract(8, 'hours')
       return generateTimeSlots(start, end);
     })
+
+    console.log(appointmentTimeSlots)
+
     const allUnavailableTimeSlots = [
       ...lunchTimeSlots, 
       ...filteredScheduleTimeSlots.flat(),  // Flatten to ensure no nested arrays
