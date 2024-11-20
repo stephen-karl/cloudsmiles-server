@@ -28,9 +28,30 @@ dotenv.config();
 const app = express();
 const port = process.env.PORT || 3000;
 
+<<<<<<< HEAD
+=======
+
+
+
+>>>>>>> c0c30f4d0a2b1d248cf5135918e66b1609abf748
 
 async function startServer() {
   try {
+    // Create Redis client
+    const redisClient = createClient({
+      password: process.env.REDIS_PASSWORD,
+      socket: {
+        host: process.env.REDIS_HOST,
+        port: parseInt(process.env.REDIS_PORT || '6379'),
+      },
+    });
+    
+    app.use(cors({
+      origin: process.env.FRONTEND_URL,  // Replace with your actual frontend URL
+      methods: ['GET', 'POST', 'PUT', 'DELETE'],
+      credentials: true,  // Allow cookies and authorization headers
+    }));
+
     // Connect to Redis
     await redisClient.connect();
     console.log('Successfully connected to Redis');
@@ -39,15 +60,19 @@ async function startServer() {
     await connectToMongo();
     console.log('Successfully connected to MongoDB');
 
+    
     // Initialize the server
     app.use(cookieParser());
 
+<<<<<<< HEAD
     app.use(cors({
       origin:  'http://localhost:5173', 
       methods: ["GET", "POST", "PUT", "DELETE"],
       credentials: true,  // Allow credentials (cookies, authorization headers)
     }));
 
+=======
+>>>>>>> c0c30f4d0a2b1d248cf5135918e66b1609abf748
     app.use(session({
       secret: process.env.SESSION_SECRET || 'keyboard cat',
       resave: false,
