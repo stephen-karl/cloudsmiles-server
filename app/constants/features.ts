@@ -13,6 +13,21 @@ interface IFeatureFunction {
 export const createAppointment: IFeatureFunction = async (message, patientId, chainData) => {
 
 
+  const existingAppointment = await AppointmentModel.find({
+    appointmentPatientId: patientId,
+    appointmentStatus: { $in: ["Scheduled", "Pending"] }
+  })
+
+  if (existingAppointment.length > 0) {
+    return {
+      text: "You reached the maximum number of appointments you can book at a time. Please cancel your existing appointment to book a new one.",
+      component: "",
+      chainId: chainData ? chainData._id : "",
+      data: {},
+    }
+  }
+
+
   if (!chainData) {
     await chainModel.create({
       chainPatientId: patientId,
