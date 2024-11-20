@@ -346,7 +346,6 @@ export const getDentistTimeAvailability = async (req: Request, res: Response) =>
       return res.status(404).json({ message: "No dentist found"});
     }
 
-
       
     const scheduleResult = await ScheduleModel.findOne({
       dentistId: dentistId
@@ -355,6 +354,7 @@ export const getDentistTimeAvailability = async (req: Request, res: Response) =>
     if (!scheduleResult) {
       return res.status(404).json({ message: "No schedule found"});
     }
+
 
     const appointments = await AppointmentModel.find({
       appointmentDentistId: dentistId
@@ -372,10 +372,6 @@ export const getDentistTimeAvailability = async (req: Request, res: Response) =>
     const lunchTimeSlots = generateTimeSlots(lunchDate, lunchEnd)
 
     const schedule = scheduleResult.schedules.find((schedule: ISchedule) => schedule.day === date.format('dddd')) as ISchedule;
-    
-
-
-    
 
 
     const scheduleStart = moment(schedule.start, 'HH:mm')
@@ -396,26 +392,22 @@ export const getDentistTimeAvailability = async (req: Request, res: Response) =>
 
 
 
-
     const appointmentsOnDay = appointments.filter((appointment) => {
-      const appointmentStartDate = moment.utc(appointment.appointmentDate.start); 
-      console.log("-", appointmentStartDate)
+      const appointmentStartDate = moment(appointment.appointmentDate.start);
+      appointmentStartDate.subtract(8, 'hours')
       return (
         appointmentStartDate.date() === date.date() &&
         appointmentStartDate.month() === date.month()
       );
     });
-    
-   const appointmentTimeSlots = appointmentsOnDay.map((appointment) => {
+
+    const appointmentTimeSlots = appointmentsOnDay.map((appointment) => {
       const start = moment(appointment.appointmentDate.start)
       start.subtract(8, 'hours')
       const end = moment(appointment.appointmentDate.end)
       end.subtract(8, 'hours')
       return generateTimeSlots(start, end);
     })
-
-    console.log(appointmentTimeSlots)
-
     const allUnavailableTimeSlots = [
       ...lunchTimeSlots, 
       ...filteredScheduleTimeSlots.flat(),  // Flatten to ensure no nested arrays
@@ -525,10 +517,14 @@ export const getDentistDateAvailability = async (req: Request, res: Response) =>
       const appointmentTimeSlots = appointmentsOnDay.map((appointment) => {
         // Assuming start and end are predefined or can be extracted from the appointment
         const start = moment(appointment.appointmentDate.start)
+        start.subtract(8, 'hours')
         const end = moment(appointment.appointmentDate.end)
+        end.subtract(8, 'hours')
         return generateTimeSlots(start, end);
       });
 
+
+      console.log(appointmentTimeSlots)
 
       
       const lunchTimeSlotCount = 4 
