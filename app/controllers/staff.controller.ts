@@ -393,7 +393,7 @@ export const getDentistTimeAvailability = async (req: Request, res: Response) =>
 
 
     const appointmentsOnDay = appointments.filter((appointment) => {
-      const appointmentStartDate = moment(appointment.appointmentDate.start);
+      const appointmentStartDate = moment.utc(appointment.appointmentDate.start); 
       return (
         appointmentStartDate.date() === date.date() &&
         appointmentStartDate.month() === date.month()
