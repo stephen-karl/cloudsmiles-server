@@ -42,11 +42,7 @@ async function startServer() {
     // Initialize the server
     app.use(cookieParser());
 
-    app.use(cors({
-      origin: 'https://cloudsmiles-client.onrender.com', 
-      methods: ["GET", "POST", "PUT", "DELETE"],
-      credentials: true,  // Allow credentials (cookies, authorization headers)
-    }));
+    app.use(cors());
 
     app.use(session({
       secret: process.env.SESSION_SECRET || 'keyboard cat',
