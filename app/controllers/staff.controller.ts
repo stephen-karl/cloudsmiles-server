@@ -346,6 +346,9 @@ export const getDentistTimeAvailability = async (req: Request, res: Response) =>
       return res.status(404).json({ message: "No dentist found"});
     }
 
+    console.log(date)
+    console.log(dentistId)
+
       
     const scheduleResult = await ScheduleModel.findOne({
       dentistId: dentistId
@@ -354,11 +357,12 @@ export const getDentistTimeAvailability = async (req: Request, res: Response) =>
     if (!scheduleResult) {
       return res.status(404).json({ message: "No schedule found"});
     }
-
+    console.log(scheduleResult)
 
     const appointments = await AppointmentModel.find({
       appointmentDentistId: dentistId
     })
+    console.log(appointments)
 
 
     const closingDate = moment(date).set('hour', closingTime).set('minute', 0).set('second', 0).set('millisecond', 0)
@@ -372,6 +376,10 @@ export const getDentistTimeAvailability = async (req: Request, res: Response) =>
     const lunchTimeSlots = generateTimeSlots(lunchDate, lunchEnd)
 
     const schedule = scheduleResult.schedules.find((schedule: ISchedule) => schedule.day === date.format('dddd')) as ISchedule;
+    
+
+
+    
 
 
     const scheduleStart = moment(schedule.start, 'HH:mm')
