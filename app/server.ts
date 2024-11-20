@@ -1,9 +1,9 @@
-import { createClient } from 'redis';
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import bodyParser from 'body-parser';
 import connectToMongo from './configs/mongo.config';
+import redisClient from './configs/redis.config';
 // routes
 import agentRoute from './routes/agent.route';
 import authRoute from './routes/auth.route';
@@ -28,14 +28,6 @@ dotenv.config();
 const app = express();
 const port = process.env.PORT || 3000;
 
-// Create Redis client
-const redisClient = createClient({
-  password: process.env.REDIS_PASSWORD,
-  socket: {
-    host: process.env.REDIS_HOST,
-    port: parseInt(process.env.REDIS_PORT || '6379'),
-  },
-});
 
 async function startServer() {
   try {
@@ -44,14 +36,14 @@ async function startServer() {
     console.log('Successfully connected to Redis');
 
     // Connect to MongoDB
-    connectToMongo();
+    await connectToMongo();
     console.log('Successfully connected to MongoDB');
 
     // Initialize the server
     app.use(cookieParser());
 
     app.use(cors({
-      origin:  process.env.FRONTEND_URL || 'http://localhost:5173', 
+      origin:  'http://localhost:5173', 
       methods: ["GET", "POST", "PUT", "DELETE"],
       credentials: true,  // Allow credentials (cookies, authorization headers)
     }));

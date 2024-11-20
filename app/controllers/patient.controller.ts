@@ -71,7 +71,7 @@ export const createPatient = async (req: Request, res: Response) => {
     const fullName = patientFullName;
     const firstName = fullName.split(' ')[0];
     
-    sendPatientWelcomeEmail(firstName, patientEmail, password);
+    await sendPatientWelcomeEmail(firstName, patientEmail, password);
 
     res.status(200).json({ message: "Patient created successfully"})
   } catch (error) {

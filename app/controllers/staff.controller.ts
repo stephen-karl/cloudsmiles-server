@@ -1,8 +1,7 @@
 import { Request, Response } from "express";
-import { TZDate } from "@date-fns/tz";
 import { imageUploader } from "../helpers/cloudinary/uploader";
-import { getDay } from "../utils/calendar.utils";
-import { getStartAndEndOfDay, removeDateOffset } from "../utils/date.utils";
+import { generateTimeSlots, getDay } from "../utils/calendar.utils";
+import { getStartAndEndOfDay } from "../utils/date.utils";
 import { imageDeleter } from "../helpers/cloudinary/deleter";
 import { ISchedule } from "../interfaces/schedules.types";
 import { generateRandomPassword } from "../utils/generators";
@@ -14,9 +13,11 @@ import AppointmentModel from "../schemas/mongo/appointment.schema";
 import AssistantModel from "../schemas/mongo/assistant.schema";
 import CredentialsModel from "../schemas/mongo/credential.schema";
 import bcrypt from "bcrypt";
+import moment from 'moment';
 
 const saltRounds = 10;
-
+const closingTime = 19
+const openingTime = 9
 
 export const createDentist = async (req: Request, res: Response) => {
   try {
@@ -337,6 +338,8 @@ export const getDentistTimeAvailability = async (req: Request, res: Response) =>
       return res.status(404).json({ message: "No chain data found" });
     }
 
+    const date = moment(chainData.chainDataProgress.date)
+
 
     const dentistId = chainData.chainDataProgress.dentist as string
     if (!dentistId) {
@@ -344,34 +347,82 @@ export const getDentistTimeAvailability = async (req: Request, res: Response) =>
     }
 
       
-    const schedule = await ScheduleModel.findOne({
+    const scheduleResult = await ScheduleModel.findOne({
       dentistId: dentistId
     })
 
-    if (!schedule) {
+    if (!scheduleResult) {
       return res.status(404).json({ message: "No schedule found"});
     }
 
 
-    const date = new Date(chainData.chainDataProgress.date)
-    const day = getDay(date)
-    const dentistSchedule = schedule.schedules.find((schedule: ISchedule) => schedule.day === day)
-    const { startOfDay, endOfDay } = getStartAndEndOfDay(chainData.chainDataProgress.date)
+    const appointments = await AppointmentModel.find({
+      appointmentDentistId: dentistId
+    })
 
 
-    const dentistAppointments = await AppointmentModel.aggregate([
-      {
-        $match: {
-          appointmentDentistId: dentistId,
-          'appointmentDate.start': { $gte: new Date(startOfDay) },
-          'appointmentDate.end': { $lte: new Date(endOfDay) },
-        },
-      },
-    ]);
+    const closingDate = moment(date).set('hour', closingTime).set('minute', 0).set('second', 0).set('millisecond', 0)
+    const openingDate = moment(date).set('hour', openingTime).set('minute', 0).set('second', 0).set('millisecond', 0)
 
-    res.status(200).json({
-      dentistSchedule: dentistSchedule,
-      dentistAppointments:dentistAppointments
+    const allTimeSlots = generateTimeSlots(openingDate, closingDate)
+
+    const lunchDate = moment(date).set('hour', 13).set('minute', 0).set('second', 0).set('millisecond', 0)
+    const lunchEnd = moment(date).set('hour', 14).set('minute', 0).set('second', 0).set('millisecond', 0)
+    
+    const lunchTimeSlots = generateTimeSlots(lunchDate, lunchEnd)
+
+    const schedule = scheduleResult.schedules.find((schedule: ISchedule) => schedule.day === date.format('dddd')) as ISchedule;
+
+
+    const scheduleStart = moment(schedule.start, 'HH:mm')
+      .set('year', date.year())      // Set the current year
+      .set('month', date.month())    // Set the current month
+      .set('date', date.date());     // Set the current date
+
+    const scheduleEnd = moment(schedule.end, 'HH:mm')
+      .set('year', date.year())      // Set the current year
+      .set('month', date.month())    // Set the current month
+      .set('date', date.date());     // Set the current date
+
+    const scheduleTimeSlots = generateTimeSlots(scheduleStart, scheduleEnd);
+
+    const filteredScheduleTimeSlots = allTimeSlots.filter((timeSlot) => {
+      return !scheduleTimeSlots.some((scheduleTimeSlot) => scheduleTimeSlot.time === timeSlot.time);
+    })
+
+
+
+    const appointmentsOnDay = appointments.filter((appointment) => {
+      const appointmentStartDate = moment(appointment.appointmentDate.start);
+      appointmentStartDate.subtract(8, 'hours')
+      return (
+        appointmentStartDate.date() === date.date() &&
+        appointmentStartDate.month() === date.month()
+      );
+    });
+
+    const appointmentTimeSlots = appointmentsOnDay.map((appointment) => {
+      const start = moment(appointment.appointmentDate.start)
+      start.subtract(8, 'hours')
+      const end = moment(appointment.appointmentDate.end)
+      end.subtract(8, 'hours')
+      return generateTimeSlots(start, end);
+    })
+    const allUnavailableTimeSlots = [
+      ...lunchTimeSlots, 
+      ...filteredScheduleTimeSlots.flat(),  // Flatten to ensure no nested arrays
+      ...appointmentTimeSlots.flat()        // Flatten to ensure no nested arrays
+    ];
+
+
+    const timeSlots = allTimeSlots.filter((timeSlot) => {
+      return !allUnavailableTimeSlots.some((unavailableTimeSlot) => unavailableTimeSlot.time === timeSlot.time);
+    })
+    
+
+
+    res.status(200).json({  
+      timeSlots,
     })
     
   } catch (error) {
@@ -382,12 +433,124 @@ export const getDentistTimeAvailability = async (req: Request, res: Response) =>
 
 export const getDentistDateAvailability = async (req: Request, res: Response) => {
   const patientId = req.params.id
+
+  
   try {
     const chainData = await chainModel.findOne({chainPatientId: patientId, chainIsActive: true})
-    const dentistId = chainData?.chainDataProgress?.dentist as string
-    const schedule = await ScheduleModel.findOne({dentistId})
 
-    res.status(200).json(schedule)
+    if (!chainData) {
+      return res.status(404).json({ message: "No chain data found" });
+    }
+
+
+    const dentistId = chainData.chainDataProgress.dentist as string
+
+    if (!dentistId) {
+      return res.status(404).json({ message: "No dentist found"});
+    }
+
+    const scheduleResult = await ScheduleModel.findOne({dentistId})
+
+    if (!scheduleResult) {
+      return res.status(404).json({ message: "No schedule found"});
+    }
+
+    const appointments = await AppointmentModel.find({
+      appointmentDentistId: dentistId
+    })
+
+    const date = moment(); // Get the current date as a moment object
+    const year = date.year();
+    const month = date.month(); // Current month (0-based)
+    const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+
+    // Calculate the number of days in the current month
+    const daysInMonth = date.daysInMonth();
+    
+    const appointmentSlots = Array.from({ length: daysInMonth }, (_, index) => {
+      const day = index + 1;
+      const date = moment().year(year).month(month).date(day).startOf('day'); // Set the date to midnight
+      
+      return {
+        day,
+        date, // This is a moment object set to 00:00:00.000
+      };
+    });
+
+
+
+    const availability = appointmentSlots.map((slot) => {
+
+      const schedule = scheduleResult.schedules.find((schedule: ISchedule) => schedule.day === days[slot.date.day()]) as ISchedule;
+
+      if (!schedule) {
+        return {
+          ...slot,
+          timeslots: [],
+        };
+      }
+
+
+
+      const scheduleStart = moment(schedule.start, 'HH:mm')
+        .set('year', date.year())      // Set the current year
+        .set('month', date.month())    // Set the current month
+        .set('date', date.date());     // Set the current date
+  
+      const scheduleEnd = moment(schedule.end, 'HH:mm')
+        .set('year', date.year())      // Set the current year
+        .set('month', date.month())    // Set the current month
+        .set('date', date.date());     // Set the current date
+  
+      const scheduleTimeSlots = generateTimeSlots(scheduleStart, scheduleEnd);
+
+
+      const appointmentsOnDay = appointments.filter((appointment) => {
+        const appointmentStartDate = moment(appointment.appointmentDate.start);
+        return (
+          appointmentStartDate.date() === slot.day &&
+          appointmentStartDate.month() === moment().month()
+        );
+      });
+    
+      // Generate time slots for each appointment
+      const appointmentTimeSlots = appointmentsOnDay.map((appointment) => {
+        // Assuming start and end are predefined or can be extracted from the appointment
+        const start = moment(appointment.appointmentDate.start)
+        start.subtract(8, 'hours')
+        const end = moment(appointment.appointmentDate.end)
+        end.subtract(8, 'hours')
+        return generateTimeSlots(start, end);
+      });
+
+
+      
+      const lunchTimeSlotCount = 4 
+      const totalTimeSlots = (closingTime - openingTime) * 4;
+      const appointmentTimeSlotCount = appointmentTimeSlots.flat().length;
+      const scheduleTimeSlotCount = totalTimeSlots - scheduleTimeSlots.length
+      const finalTimeSlots = appointmentTimeSlotCount + lunchTimeSlotCount + scheduleTimeSlotCount
+
+      const isAlmostFull = finalTimeSlots >= (totalTimeSlots - 4);
+      const isFull = finalTimeSlots >= totalTimeSlots;
+    
+
+
+
+      return {
+        ...slot,
+        isAlmostFull,
+        isFull
+      };
+    });
+    
+    
+
+
+    res.status(200).json({
+      schedule: scheduleResult.schedules,
+      availability,
+    })
     
   } catch (error) {
     console.log(error)

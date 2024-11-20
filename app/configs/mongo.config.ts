@@ -1,10 +1,15 @@
 import mongoose from 'mongoose';
+import dotenv from 'dotenv';
 
-const connectToMongo = () => {
+dotenv.config();
+
+const connectToMongo = async () => {
   const dbUrl = process.env.MONGODB_DATABASE_URL + '/cloudsmiles';
-  mongoose.connect(dbUrl)
-    .then(() => console.log('Successfully connected to MongoDB'))
-    .catch((error: Error) => console.error('MongoDB connection error:', error));
+  try {
+    await mongoose.connect(dbUrl)
+  } catch (error) {
+    console.error('Error connecting to MongoDB:', error);
+  }
 };
 
 export default connectToMongo;

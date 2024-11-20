@@ -1,4 +1,4 @@
-import {startOfWeek, endOfWeek, format } from 'date-fns';
+import {startOfWeek, endOfWeek, format, startOfDay, addHours, addMinutes } from 'date-fns';
 import { TZDate } from "@date-fns/tz";
 
 const timeZone = 'Asia/Taipei';
@@ -60,7 +60,7 @@ export const addDateOffset = (date: Date): string => {
   return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}.${milliseconds}Z`;
 }
 
-export const removeDateOffset = (stringDate: string): Date => {
+export const  removeDateOffset = (stringDate: string): Date => {
   const date = new Date(stringDate);
   date.setHours(date.getHours() - 8);
   return date;
@@ -106,3 +106,22 @@ export const formatDateWithSuffix = (date: string): string => {
 
   return `${day}${getSuffix(day)} ${month} ${year}`;
 }
+
+export const generateDateForDay = (day: string, date: Date): Date => {
+  const daysOfWeekOrder = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+  const startOfWeek = new Date(date);
+  const dayOfWeek = startOfWeek.getDay();
+  const diffToMonday = (dayOfWeek + 6) % 7; // Calculate difference to Monday
+  startOfWeek.setDate(startOfWeek.getDate() - diffToMonday);
+  startOfWeek.setHours(0, 0, 0, 0); // Set time to midnight
+
+  const targetDayIndex = daysOfWeekOrder.indexOf(day);
+  if (targetDayIndex === -1) {
+      throw new Error("Invalid day provided");
+  }
+
+  const targetDate = new Date(startOfWeek);
+  targetDate.setDate(startOfWeek.getDate() + targetDayIndex);
+
+  return targetDate;
+};
