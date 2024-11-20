@@ -43,7 +43,7 @@ async function startServer() {
     app.use(cookieParser());
 
     app.use(cors({
-      origin: 'https://cloudsmiles-client.vercel.app, 
+      origin: 'https://cloudsmiles-client.vercel.app', 
       methods: ["GET", "POST", "PUT", "DELETE"],
       credentials: true,  // Allow credentials (cookies, authorization headers)
     }));
