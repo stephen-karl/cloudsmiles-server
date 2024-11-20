@@ -346,8 +346,6 @@ export const getDentistTimeAvailability = async (req: Request, res: Response) =>
       return res.status(404).json({ message: "No dentist found"});
     }
 
-    console.log(date)
-    console.log(dentistId)
 
       
     const scheduleResult = await ScheduleModel.findOne({
@@ -357,12 +355,10 @@ export const getDentistTimeAvailability = async (req: Request, res: Response) =>
     if (!scheduleResult) {
       return res.status(404).json({ message: "No schedule found"});
     }
-    console.log(scheduleResult)
 
     const appointments = await AppointmentModel.find({
       appointmentDentistId: dentistId
     })
-    console.log(appointments)
 
 
     const closingDate = moment(date).set('hour', closingTime).set('minute', 0).set('second', 0).set('millisecond', 0)
@@ -400,13 +396,17 @@ export const getDentistTimeAvailability = async (req: Request, res: Response) =>
 
 
 
+
     const appointmentsOnDay = appointments.filter((appointment) => {
       const appointmentStartDate = moment.utc(appointment.appointmentDate.start); 
+      console.log("-", appointmentStartDate)
       return (
         appointmentStartDate.date() === date.date() &&
         appointmentStartDate.month() === date.month()
       );
     });
+    
+    console.log(appointmentsOnDay)
 
     const appointmentTimeSlots = appointmentsOnDay.map((appointment) => {
       const start = moment(appointment.appointmentDate.start)
