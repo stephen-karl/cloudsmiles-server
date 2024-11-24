@@ -436,6 +436,7 @@ export const getDentistTimeAvailability = async (req: Request, res: Response) =>
 
 export const getDentistDateAvailability = async (req: Request, res: Response) => {
   const patientId = req.params.id
+  const queryDate = req.query.date as string
 
   
   try {
@@ -462,7 +463,8 @@ export const getDentistDateAvailability = async (req: Request, res: Response) =>
       appointmentDentistId: dentistId
     })
 
-    const date = moment(); // Get the current date as a moment object
+    const date = queryDate ? moment(queryDate) : moment();
+    console.log(date)
     const year = date.year();
     const month = date.month(); // Current month (0-based)
     const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
@@ -520,14 +522,11 @@ export const getDentistDateAvailability = async (req: Request, res: Response) =>
       const appointmentTimeSlots = appointmentsOnDay.map((appointment) => {
         // Assuming start and end are predefined or can be extracted from the appointment
         const start = moment(appointment.appointmentDate.start)
-        start.subtract(8, 'hours')
         const end = moment(appointment.appointmentDate.end)
-        end.subtract(8, 'hours')
         return generateTimeSlots(start, end);
       });
 
 
-      console.log(appointmentTimeSlots)
 
       
       const lunchTimeSlotCount = 4 
@@ -538,9 +537,10 @@ export const getDentistDateAvailability = async (req: Request, res: Response) =>
 
       const isAlmostFull = finalTimeSlots >= (totalTimeSlots - 4);
       const isFull = finalTimeSlots >= totalTimeSlots;
+
+
+      console.log(slot.day, scheduleTimeSlotCount, appointmentTimeSlotCount,) 
     
-
-
 
       return {
         ...slot,
@@ -550,7 +550,6 @@ export const getDentistDateAvailability = async (req: Request, res: Response) =>
     });
     
     
-
 
     res.status(200).json({
       schedule: scheduleResult.schedules,
