@@ -1,5 +1,6 @@
 import {startOfWeek, endOfWeek, format, startOfDay, addHours, addMinutes } from 'date-fns';
 import { TZDate } from "@date-fns/tz";
+import { Moment } from 'moment';
 
 const timeZone = 'Asia/Taipei';
 
@@ -17,6 +18,14 @@ export const getStartAndEndOfDay = (dateString: string) => {
   const endOfDay = `${newDate}T23:59:59.999Z`;
 
   return { startOfDay: startOfDay, endOfDay: endOfDay };
+};
+
+export const getStartAndEndOfMonth = (dateString: string) => {
+  const date = new Date(dateString);
+  const startOfMonth = new Date(date.getFullYear(), date.getMonth(), 1);
+  const endOfMonth = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+
+  return { startOfMonth: startOfMonth, endOfMonth: endOfMonth };
 };
 
 export const getWeekRange = (date: string): { start: Date, end: Date } => {
