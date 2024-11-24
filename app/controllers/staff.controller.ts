@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { imageUploader } from "../helpers/cloudinary/uploader";
 import { generateTimeSlots, getDay } from "../utils/calendar.utils";
-import { getStartAndEndOfDay } from "../utils/date.utils";
+import { getStartAndEndOfDay, getStartAndEndOfMonth } from "../utils/date.utils";
 import { imageDeleter } from "../helpers/cloudinary/deleter";
 import { ISchedule } from "../interfaces/schedules.types";
 import { generateRandomPassword } from "../utils/generators";
@@ -459,12 +459,19 @@ export const getDentistDateAvailability = async (req: Request, res: Response) =>
       return res.status(404).json({ message: "No schedule found"});
     }
 
+    const {startOfMonth, endOfMonth} = getStartAndEndOfMonth(queryDate)
+    
     const appointments = await AppointmentModel.find({
-      appointmentDentistId: dentistId
+      appointmentDentistId: dentistId,
+      "appointmentDate.start": {
+        $gte: startOfMonth, // appointment start date should be greater than or equal to the start of the month
+        $lte: endOfMonth    // appointment start date should be less than or equal to the end of the month
+      }
     })
 
+    console.log(appointments)
+
     const date = queryDate ? moment(queryDate) : moment();
-    console.log(date)
     const year = date.year();
     const month = date.month(); // Current month (0-based)
     const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
@@ -509,7 +516,6 @@ export const getDentistDateAvailability = async (req: Request, res: Response) =>
   
       const scheduleTimeSlots = generateTimeSlots(scheduleStart, scheduleEnd);
 
-
       const appointmentsOnDay = appointments.filter((appointment) => {
         const appointmentStartDate = moment(appointment.appointmentDate.start);
         return (
@@ -520,7 +526,6 @@ export const getDentistDateAvailability = async (req: Request, res: Response) =>
     
       // Generate time slots for each appointment
       const appointmentTimeSlots = appointmentsOnDay.map((appointment) => {
-        // Assuming start and end are predefined or can be extracted from the appointment
         const start = moment(appointment.appointmentDate.start)
         const end = moment(appointment.appointmentDate.end)
         return generateTimeSlots(start, end);
@@ -539,7 +544,6 @@ export const getDentistDateAvailability = async (req: Request, res: Response) =>
       const isFull = finalTimeSlots >= totalTimeSlots;
 
 
-      console.log(slot.day, scheduleTimeSlotCount, appointmentTimeSlotCount,) 
     
 
       return {
