@@ -43,7 +43,7 @@ async function startServer() {
     app.use(cookieParser());
 
     app.use(cors({
-      origin: 'https://www.vsdentalph.com',  // Set the exact origin
+      origin: '*',  // Set the exact origin
       methods: ["GET", "POST", "PUT", "DELETE"],
       credentials: true,  // Allow credentials (cookies, authorization headers)
     }));
