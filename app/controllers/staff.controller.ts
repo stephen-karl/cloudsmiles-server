@@ -11,6 +11,7 @@ import ScheduleModel from "../schemas/mongo/schedule.schema";
 import chainModel from "../schemas/mongo/chains.schema";
 import AppointmentModel from "../schemas/mongo/appointment.schema";
 import AssistantModel from "../schemas/mongo/assistant.schema";
+import ReviewModel from '../schemas/mongo/reviews.schema'
 import CredentialsModel from "../schemas/mongo/credential.schema";
 import bcrypt from "bcrypt";
 import moment from 'moment';
@@ -198,22 +199,45 @@ export const deleteDentist = async (req: Request, res: Response) => {
 }
 
 // This is for staff page where the admin can view all the dentists in a data table.
+// This is for staff page where the admin can view all the dentists in a data table.
 export const getAllDentists = async (req: Request, res: Response) => {
   try {
+    // Fetch dentists from the database with the required population
     const dentistResponse = await DentistModel
-    .find({ isDeleted: false })
-    .populate('dentistScheduleId')
-    .populate({
-      path: 'dentistCredentialId',
-      select: 'credentialEmail credentialPhoneNumber' // Only select email and phone number
-    })
-    .sort({ createdAt: -1 })
+      .find({ isDeleted: false })
+      .populate('dentistScheduleId')
+      .populate({
+        path: 'dentistCredentialId',
+        select: 'credentialEmail credentialPhoneNumber', // Only select email and phone number
+      })
+      .sort({ createdAt: -1 });
 
-    res.status(200).json(dentistResponse)
+    const dentistWithRatings = []; // To hold the final results
+
+    // Iterate over each dentist sequentially
+    for (const dentist of dentistResponse) {
+      // Fetch reviews for each dentist
+      const reviews = await ReviewModel.find({ reviewDentistId: dentist._id });
+      
+      // Calculate the total rating and number of reviews
+      const dentistRatings = reviews.reduce((acc: number, review: { reviewRating: number }) => acc + review.reviewRating, 0);
+      const dentistReviews = reviews.length;
+
+      // Add the dentist data with ratings and reviews to the result array
+      dentistWithRatings.push({
+        ...dentist.toObject(),
+        dentistRatings,
+        dentistReviews,
+      });
+    }
+
+    // Send the response with the modified dentist data
+    res.status(200).json(dentistWithRatings);
   } catch (error) {
-    res.status(500).json({ message: "Error fetching dentist" });
+    // Handle errors
+    res.status(500).json({ message: "Error fetching dentist", error: error });
   }
-}
+};
 
 // This is for the calendar page where the admin can view all the dentists in the header.
 export const getDayDentists = async (req: Request, res: Response) => {
