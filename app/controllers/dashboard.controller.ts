@@ -306,17 +306,17 @@ export const getPayments = async (req: Request, res: Response) => {
       }
     });
 
-    // Calculate the total payment amount
-    const totalRevenue = payments.reduce((total, payment) => total + payment.paymentAmount, 0);
+    const totalPayments = payments.length;
 
     // Construct the response object
     const response = {
       payments: payments,
-      totalRevenue: totalRevenue,
+      totalPayments: totalPayments,
       data: monthPaymentData, 
       partialPayments: partialPayments.length,
       paidPayments: paidPayments.length
     };
+
 
     res.status(200).json(response);
   } catch (error) {
