@@ -28,10 +28,6 @@ const port = process.env.PORT || 3000;
 
 async function startServer() {
   try {
-    // Connect to Redis
-    await redisClient.connect();
-    console.log('Successfully connected to Redis');
-
     // Connect to MongoDB
     await connectToMongo();
     console.log('Successfully connected to MongoDB');
