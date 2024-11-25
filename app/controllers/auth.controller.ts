@@ -215,7 +215,7 @@ export const loginLocal = async (req: Request, res: Response ) => {
     const firstName = fullName.split(" ")[0];
     const otp = Math.floor(100000 + Math.random() * 900000);
 
-    // sendVerificationCode(email, firstName, otp);
+    sendVerificationCode(email, firstName, otp);
 
     await CredentialsModel.updateOne({ credentialEmail: email }, { $set: { 
       credentialOTP: otp,
