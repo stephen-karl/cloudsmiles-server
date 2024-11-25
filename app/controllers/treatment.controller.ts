@@ -6,6 +6,7 @@ import MedicineModel from '../schemas/mongo/medicine.schema';
 import ComponentModel from "../schemas/mongo/component.schema";
 import TreatmentModel from '../schemas/mongo/treatment.schema';
 import CheckupModel from '../schemas/mongo/checkup.schema';
+import ReviewModel from '../schemas/mongo/reviews.schema';
 
 
 export const getAvailableComponents = async (req: Request, res: Response) => {
@@ -192,7 +193,20 @@ export const getTreatments = async (req: Request, res: Response) => {
             console.error(`Error processing medicine ${medicine._id} in treatment ${treatment._id}:`, error);
           }
         }
-    
+
+        let treatmentRatings = 0;
+        let treatmentReviews = 0;
+
+        const treatmentIds = treatment._id;
+        const reviews = await ReviewModel.find({
+          reviewTreatments: { $in: treatmentIds }
+        });
+        if (reviews.length > 0) {
+          const ratings = reviews.reduce((acc, review) => acc + review.reviewRating, 0);
+          treatmentRatings = ratings / reviews.length;
+          treatmentReviews = reviews.length
+        } 
+
         response.push({
           _id: treatment._id,
           treatmentId: treatment._id,
@@ -205,6 +219,8 @@ export const getTreatments = async (req: Request, res: Response) => {
           treatmentComponents: components.length > 0 ? components : [],
           treatmentMedicines: medicines.length > 0 ? medicines : [],
           treatmentSerialId: treatment.treatmentSerialId,
+          treatmentRatings,
+          treatmentReviews,
         });
     
       } catch (error) {
