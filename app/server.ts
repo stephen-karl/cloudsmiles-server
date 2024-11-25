@@ -17,6 +17,8 @@ import vendorRoute from './routes/vendor.route';
 import dashboardRoute from './routes/dashboard.route';
 import profileRoute from './routes/profile.route';
 import reviewRoute from './routes/review.route';
+import activityRoute from './routes/activity.route';
+
 // auths
 import cookieParser from 'cookie-parser';
 
@@ -61,6 +63,8 @@ async function startServer() {
     app.use('/dashboard/v1', dashboardRoute);
     app.use('/profile/v1', profileRoute);
     app.use('/review/v1', reviewRoute);
+    app.use('/activity/v1', activityRoute);
+
 
     // Start server
     app.listen(port, () => {
