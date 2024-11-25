@@ -11,7 +11,7 @@ import {
   partiallyPayWithCash,
   partiallyCheckBillStatus,
   getPayments,
-  getMonthlyRevenue,
+  getPaymentCount,
  } from "../controllers/payment.controller";
 
 const router = express.Router()
@@ -24,7 +24,7 @@ router.get('/partially-check-bill-status/:id', partiallyCheckBillStatus)
 router.post('/pay-with-cash', payWithCash)
 router.post('/partially-pay-with-cash', partiallyPayWithCash)
 router.get('/payments', getPayments)
-router.get('/monthly-revenue', getMonthlyRevenue)
+router.get('/get-payment-count', getPaymentCount)
 router.get('/get-qr-code/:id', getQRCode)
 
 
