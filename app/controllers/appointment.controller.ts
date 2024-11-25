@@ -103,6 +103,20 @@ export const createAppointment = async (req: Request, res: Response) => {
   }
 }
 
+export const cancelAppointment = async (req: Request, res: Response) => {
+  const appointmentId = req.params.id;
+  try {
+    const appointmentResult = await AppointmentModel.findByIdAndUpdate(
+      appointmentId,
+      { appointmentStatus: 'Cancelled' },
+      { new: true }
+    );
+    res.status(200).json(appointmentResult);
+  } catch (error) {
+    res.status(500).send({message: error});
+  } 
+}
+
 export const getDayAppointments = async (req: Request, res: Response) => {
   const date = req.params.date;
   const { startOfDay, endOfDay } = getStartAndEndOfDay(date);
