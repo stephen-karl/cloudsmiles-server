@@ -39,7 +39,10 @@ async function startServer() {
     app.use(cookieParser());
 
     app.use(cors({
-      origin: 'http://localhost:5173',
+     origin: [
+        'http://localhost:5173',
+        'https://www.vsdentalph.com'
+      ],      
       methods: ["GET", "POST", "PUT", "DELETE"],
       credentials: true,  // Allow credentials (cookies, authorization headers)
     }));
