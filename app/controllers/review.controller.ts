@@ -43,3 +43,20 @@ export const createReview = async (req: Request, res: Response) => {
     res.status(400).send(error)
   }
 }
+
+export const getAppointmentReview = async (req: Request, res: Response) => {
+  const appointmentId = req.params.id
+  try {    
+    const review = await ReviewModel.findOne({ reviewAppointmentId: appointmentId })
+  
+    if (!review) {
+      return res.status(200).json(false)
+    }
+  
+    if (review) {
+      return res.status(200).json(true)
+    }
+  } catch (error) {
+    res.status(500).json(error)
+  }
+}
