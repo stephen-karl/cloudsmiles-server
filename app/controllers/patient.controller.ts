@@ -235,7 +235,10 @@ export const getPatientProfile = async (req: Request, res: Response) => {
     const patientId = patient._id as string;
     
     const record = await RecordModel.findOne({ recordPatientId: patientId });
-    const appointments = await AppointmentModel.find({ appointmentPatientId: patientId });
+    const appointments = await AppointmentModel.find({ 
+      appointmentPatientId: patientId,
+      appointmentStatus: "Finished"
+    });    
     const checkups = await CheckupModel.find({ checkupPatientId: patientId })
       .populate('checkupAppointmentId')  // Populating the Appointment
       .populate('checkupTreatmentId')  // Populating Treatment
