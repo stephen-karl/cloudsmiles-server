@@ -3,7 +3,6 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import bodyParser from 'body-parser';
 import connectToMongo from './configs/mongo.config';
-import redisClient from './configs/redis.config';
 // routes
 import agentRoute from './routes/agent.route';
 import authRoute from './routes/auth.route';
@@ -18,9 +17,10 @@ import dashboardRoute from './routes/dashboard.route';
 import profileRoute from './routes/profile.route';
 import reviewRoute from './routes/review.route';
 import activityRoute from './routes/activity.route';
-
+import notificationRoute from './routes/notification.route';
 // auths
 import cookieParser from 'cookie-parser';
+
 
 dotenv.config();
 
@@ -30,6 +30,7 @@ const port = process.env.PORT || 3000;
 
 async function startServer() {
   try {
+
     // Connect to MongoDB
     await connectToMongo();
     console.log('Successfully connected to MongoDB');
@@ -38,14 +39,10 @@ async function startServer() {
     app.use(cookieParser());
 
     app.use(cors({
-      origin: [
-        'http://localhost:5173',
-        'https://www.vsdentalph.com'
-      ],
+      origin: 'http://localhost:5173',
       methods: ["GET", "POST", "PUT", "DELETE"],
       credentials: true,  // Allow credentials (cookies, authorization headers)
     }));
-
 
     app.use(bodyParser.json({ limit: '30mb' }));
     app.use(bodyParser.urlencoded({ limit: '30mb', extended: true }));
@@ -64,7 +61,7 @@ async function startServer() {
     app.use('/profile/v1', profileRoute);
     app.use('/review/v1', reviewRoute);
     app.use('/activity/v1', activityRoute);
-
+    app.use('/notification/v1', notificationRoute);
 
     // Start server
     app.listen(port, () => {
