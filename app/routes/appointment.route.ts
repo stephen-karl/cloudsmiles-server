@@ -3,6 +3,7 @@ import multer, { memoryStorage } from "multer";
 
 import { 
   createAppointment,
+  cancelAppointment,
   getDayAppointments,
   getWeekAppointments,
   getMonthlyAppointments,
@@ -22,6 +23,7 @@ const upload = multer({ limits: { files: 5 } });
 
 
 router.post('/create-appointment', createAppointment)
+router.put('/cancel-appointment/:id', cancelAppointment)
 router.get('/get-appointments/day/:date', getDayAppointments)
 router.get('/get-appointments/week', getWeekAppointments)
 router.get('/get-appointments/month/:date', getMonthlyAppointments)
