@@ -18,10 +18,7 @@ import dashboardRoute from './routes/dashboard.route';
 import profileRoute from './routes/profile.route';
 import reviewRoute from './routes/review.route';
 // auths
-import passport from 'passport';
-import session from 'express-session';
 import cookieParser from 'cookie-parser';
-import RedisStore from 'connect-redis';
 
 dotenv.config();
 
@@ -51,18 +48,6 @@ async function startServer() {
       credentials: true,  // Allow credentials (cookies, authorization headers)
     }));
 
-    app.use(session({
-      secret: process.env.SESSION_SECRET || 'keyboard cat',
-      resave: false,
-      saveUninitialized: true,
-      store: new RedisStore({
-        client: redisClient,  // Redis client instance
-        ttl: 86400,  // Time-to-live for sessions (1 day)
-      }),
-    }));
-
-    app.use(passport.initialize());
-    app.use(passport.session());
 
     app.use(bodyParser.json({ limit: '30mb' }));
     app.use(bodyParser.urlencoded({ limit: '30mb', extended: true }));
