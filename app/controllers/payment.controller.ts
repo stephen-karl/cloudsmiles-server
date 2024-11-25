@@ -396,78 +396,10 @@ export const getPayments = async (req: Request, res: Response) => {
     res.status(500).json(error);
   }
 }
-export const getMonthlyRevenue = async (req: Request, res: Response) => {
+export const getPaymentCount = async (req: Request, res: Response) => {
   try {
-    const now = new Date();
-    const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
-    const endOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0, 23, 59, 59);
-    
-    const lastMonthStart = new Date(now.getFullYear(), now.getMonth() - 1, 1);
-    const lastMonthEnd = new Date(now.getFullYear(), now.getMonth(), 0, 23, 59, 59);
-
-    // Aggregation for the current month
-    const currentMonthStats = await PaymentModel.aggregate([
-      {
-        $match: {
-          createdAt: { $gte: startOfMonth, $lte: endOfMonth },
-          // paymentStatus: 'paid', // Assuming 'paid' payments contribute to revenue/profit
-        },
-      },
-      {
-        $group: {
-          _id: null,
-          totalRevenue: { $sum: "$paymentTotalCost" }, // Summing up the total cost as revenue
-          totalProfit: { $sum: "$paymentAmount" }, // Assuming paymentAmount is the profit
-        },
-      },
-    ]);
-
-    // Aggregation for the previous month
-    const lastMonthStats = await PaymentModel.aggregate([
-      {
-        $match: {
-          createdAt: { $gte: lastMonthStart, $lte: lastMonthEnd },
-          paymentStatus: 'paid',
-        },
-      },
-      {
-        $group: {
-          _id: null,
-          totalRevenue: { $sum: "$paymentTotalCost" },
-          totalProfit: { $sum: "$paymentAmount" },
-        },
-      },
-    ]);
-
-    // Default to zero if no stats found
-    const currentMonthRevenue = currentMonthStats[0]?.totalRevenue || 0;
-    const currentMonthProfit = currentMonthStats[0]?.totalProfit || 0;
-    const lastMonthRevenue = lastMonthStats[0]?.totalRevenue || 0;
-    const lastMonthProfit = lastMonthStats[0]?.totalProfit || 0;
-
-    // Calculate trends
-    const revenueIsUpTrend = currentMonthRevenue > lastMonthRevenue;
-    const profitIsUpTrend = currentMonthProfit > lastMonthProfit;
-    
-    const revenuePercentage = lastMonthRevenue 
-      ? ((currentMonthRevenue - lastMonthRevenue) / lastMonthRevenue) * 100 
-      : 100;
-    const profitPercentage = lastMonthProfit 
-      ? ((currentMonthProfit - lastMonthProfit) / lastMonthProfit) * 100 
-      : 100;
-
-    res.json({
-      profit: {
-        value: currentMonthProfit,
-        isUpTrend: profitIsUpTrend,
-        percentage: Math.round(profitPercentage),
-      },
-      revenue: {
-        value: currentMonthRevenue,
-        isUpTrend: revenueIsUpTrend,
-        percentage: Math.round(revenuePercentage),
-      },
-    });
+    const paymentCount = await PaymentModel.countDocuments();
+    res.status(200).json(paymentCount);
   } catch (error) {
     res.status(500).json({ error: error });
   }
