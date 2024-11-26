@@ -433,3 +433,41 @@ export const getTreatmentCount = async (req: Request, res: Response) => {
     res.status(500).json({ message: "Error fetching treatment count" });
   }
 }
+
+export const getTopTreatments = async (req: Request, res: Response) => {
+  // Get top 3 treatments based on the number of reviews
+  try {
+    const topTreatments = await ReviewModel.aggregate([
+      { $unwind: "$reviewTreatments" },
+      { $group: { 
+          _id: "$reviewTreatments", 
+          averageRating: { $avg: "$reviewRating" },
+          count: { $sum: 1 }
+        }
+      },
+      { $sort: { averageRating: -1, count: -1 } },
+      { $limit: 3 },
+      // Lookup to join with treatments collection
+      { 
+        $lookup: {
+          from: "treatments",  // Name of the collection for treatments
+          localField: "_id",    // The field to match in the reviews
+          foreignField: "_id",  // The field to match in the treatments collection
+          as: "treatmentDetails" // The alias for the resulting treatment details
+        }
+      },
+      // Optionally, unwind the treatmentDetails if you expect only one treatment per review
+      { $unwind: "$treatmentDetails" },
+    ]);
+
+    console.log(topTreatments)
+    // Use `map` to transform the results into the desired format
+    const formattedTopTreatments = topTreatments.map((item) => ({
+      name: item.treatmentDetails.treatmentName,
+      reviews: item.averageRating,
+    }));
+    res.status(200).json(formattedTopTreatments);
+  } catch (error) {
+    res.status(500).json({ message: "Error fetching top treatments" }); 
+  }
+}
