@@ -8,7 +8,8 @@ import {
   deleteTreatment,
   editTreatment,
   getTreatmentCost,
-  getTreatmentCount
+  getTreatmentCount,
+  getTopTreatments
 } from "../controllers/treatment.controller";
 
 const router = express.Router()
@@ -21,4 +22,5 @@ router.delete('/delete-treatment/:id', deleteTreatment)
 router.put('/edit-treatment', editTreatment)
 router.get('/get-treatment-cost/:id', getTreatmentCost)
 router.get('/get-treatment-count', getTreatmentCount)
+router.get('/get-top-treatments', getTopTreatments)
 export default router 
